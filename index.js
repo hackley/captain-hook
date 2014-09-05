@@ -29,6 +29,8 @@ function captainHook(schema) {
   }
 
   schema.methods.runPreCreate = function(callback){
+    // try using async's eachSeries iterator to pass 'this' into each function
+    // https://github.com/caolan/async#eachseriesarr-iterator-callback
     async.series(schema.preCreateMethods,
     function(err, results){
       callback();
