@@ -1,39 +1,88 @@
-function captainHook(schema, options) {
+var hooks = require('hooks'),
+    async = require('async');
+
+function captainHook(schema) {
 
   schema.pre('save', function (next) {
-    if (this.isNew) this.emit('pre_create', this)
-    else this.emit('pre_update', this);
     this._wasNew = this.isNew;
-    next();
+    if (this.isNew) {
+      this.runPreCreate(function(){
+        console.log("la fin");
+        next();
+      })
+    } else {
+      this.runPreUpdate(function(){
+        console.log("la fin update");
+        next();
+      })
+    }
   })
+
+  // Pre-Create Methods
+  schema.preCreateMethods = []
+
+  schema.preCreate = function(fn){
+    var self = this;
+    schema.preCreateMethods.push(function(next){
+      fn(self, next);
+    });
+  }
+
+  schema.methods.runPreCreate = function(callback){
+    async.series(schema.preCreateMethods,
+    function(err, results){
+      callback();
+    });
+  }
+
+  // Pre-Update Methods
+  schema.preUpdateMethods = []
+
+  schema.preUpdate = function(fn){
+    schema.preUpdateMethods.push(fn);
+  }
+
+  schema.methods.runPreUpdate = function(callback){
+    async.series(schema.preUpdateMethods,
+    function(err, results){
+      callback();
+    });
+  }
+
+
+
+
 
   schema.post('save', function () {
-    if (this._wasNew) this.emit('post_create', this)
-    else this.emit('post_update', this);
+    if (this._wasNew) {
+      this.runPostCreate();
+    } else {
+      this.runPostUpdate();
+    }
   })
 
-  schema.statics.preCreate = function(callback){
-    schema.post('pre_create', function(self){
-      callback(self);
-    });
+
+  // Post-Create Methods
+  schema.postCreateMethods = []
+
+  schema.postCreate = function(fn){
+    schema.postCreateMethods.push(fn);
   }
 
-  schema.statics.preUpdate = function(callback){
-    schema.post('pre_update', function(self){
-      callback(self);
-    });
+  schema.methods.runPostCreate = function(){
+    async.series(schema.postCreateMethods);
   }
 
-  schema.statics.postCreate = function(callback){
-    schema.post('post_create', function(self){
-      callback(self);
-    });
+
+  // Post-Update Methods
+  schema.postUpdateMethods = []
+
+  schema.postUpdate = function(fn){
+    schema.postUpdateMethods.push(fn);
   }
 
-  schema.statics.postUpdate = function(callback){
-    schema.post('post_update', function(self){
-      callback(self);
-    });
+  schema.methods.runPostUpdate = function(){
+    async.series(schema.postUpdateMethods);
   }
 
 }
