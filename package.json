@@ -1,0 +1,29 @@
+{
+  "name": "captain-hook",
+  "version": "0.0.1",
+  "description": "Pre- and Post- Create and Update Hooks for Mongoose ODM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nathanhackley/captain-hook.git"
+  },
+  "keywords": [
+    "mongoose",
+    "odm",
+    "hooks",
+    "pre",
+    "post",
+    "create",
+    "update",
+    "plugin"
+  ],
+  "author": "Nathan Hackley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nathanhackley/captain-hook/issues"
+  },
+  "homepage": "https://github.com/nathanhackley/captain-hook"
+}
