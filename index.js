@@ -2,6 +2,7 @@ var async = require('async');
 
 function captainHook(schema) {
 
+  // Pre-Save Setup
   schema.pre('save', function (next) {
     var self = this;
     this._wasNew = this.isNew;
@@ -18,6 +19,20 @@ function captainHook(schema) {
     }
   })
 
+
+
+  // Post-Save Setup
+  schema.post('save', function () {
+    var self = this;
+    if (this._wasNew) {
+      this.runPostCreate(self);
+    } else {
+      this.runPostUpdate(self);
+    }
+  })
+
+
+
   // Pre-Create Methods
   schema.preCreateMethods = []
 
@@ -33,7 +48,6 @@ function captainHook(schema) {
         callback();
     });
   }
-
 
 
 
@@ -56,18 +70,6 @@ function captainHook(schema) {
 
 
 
-
-
-  schema.post('save', function () {
-    var self = this;
-    if (this._wasNew) {
-      this.runPostCreate(self);
-    } else {
-      this.runPostUpdate(self);
-    }
-  })
-
-
   // Post-Create Methods
   schema.postCreateMethods = []
 
@@ -85,6 +87,7 @@ function captainHook(schema) {
         }
     });
   }
+
 
 
   // Post-Update Methods
