@@ -1,38 +1,107 @@
-function captainHook(schema, options) {
+var async = require('async');
+
+function captainHook(schema) {
 
   schema.pre('save', function (next) {
-    if (this.isNew) this.emit('pre_create', this)
-    else this.emit('pre_update', this);
+    var self = this;
     this._wasNew = this.isNew;
-    next();
+    if (this.isNew) {
+      this.runPreCreate(self, function(){
+        console.log("la fin");
+        next();
+      })
+    } else {
+      this.runPreUpdate(self, function(){
+        console.log("la fin update");
+        next();
+      })
+    }
   })
+
+  // Pre-Create Methods
+  schema.preCreateMethods = []
+
+  schema.preCreate = function(fn){
+    schema.preCreateMethods.push(fn);
+  }
+
+  schema.methods.runPreCreate = function(self, callback){
+    async.eachSeries(schema.preCreateMethods,
+      function(fn, cb) {
+        fn(self, cb);
+      }, function(err){
+        callback();
+    });
+  }
+
+
+
+
+  // Pre-Update Methods
+  schema.preUpdateMethods = []
+
+  schema.preUpdate = function(fn){
+    schema.preUpdateMethods.push(fn);
+  }
+
+
+  schema.methods.runPreUpdate = function(self, callback){
+    async.eachSeries(schema.preUpdateMethods,
+      function(fn, cb) {
+        fn(self, cb);
+      }, function(err){
+        callback();
+    });
+  }
+
+
+
+
 
   schema.post('save', function () {
-    if (this._wasNew) this.emit('post_create', this)
-    else this.emit('post_update', this);
+    var self = this;
+    if (this._wasNew) {
+      this.runPostCreate(self);
+    } else {
+      this.runPostUpdate(self);
+    }
   })
 
-  schema.statics.preCreate = function(callback){
-    schema.post('pre_create', function(self){
-      callback(self);
+
+  // Post-Create Methods
+  schema.postCreateMethods = []
+
+  schema.postCreate = function(fn){
+    schema.postCreateMethods.push(fn);
+  }
+
+  schema.methods.runPostCreate = function(self, callback){
+    async.eachSeries(schema.postCreateMethods,
+      function(fn, cb) {
+        fn(self, cb);
+      }, function(err){
+        if (err) {
+          console.log(err);
+        }
     });
   }
 
-  schema.statics.preUpdate = function(callback){
-    schema.post('pre_update', function(self){
-      callback(self);
-    });
+
+  // Post-Update Methods
+  schema.postUpdateMethods = []
+
+  schema.postUpdate = function(fn){
+    schema.postUpdateMethods.push(fn);
   }
 
-  schema.statics.postCreate = function(callback){
-    schema.post('post_create', function(self){
-      callback(self);
-    });
-  }
-
-  schema.statics.postUpdate = function(callback){
-    schema.post('post_update', function(self){
-      callback(self);
+  schema.methods.runPostUpdate = function(self, callback){
+    async.eachSeries(schema.postUpdateMethods,
+      function(fn, cb) {
+        fn(self, cb);
+      }, function(err){
+        if (err) {
+          console.log(err);
+        }
     });
   }
 
