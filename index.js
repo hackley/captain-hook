@@ -1,5 +1,4 @@
-var hooks = require('hooks'),
-    async = require('async');
+var async = require('async');
 
 function captainHook(schema) {
 
