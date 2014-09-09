@@ -1,53 +1,59 @@
 var expect        = require("chai").expect,
     mongoose      = require("mongoose"),
-    schema        = require("./setup/comment_schema"),
+    Comment       = require("./setup/comment_schema"),
     commentData   = require("./setup/comment_data");
+
+// Connect to Mongo DB
+mongoose.connect("mongodb://localhost:27017/captain_hook_test");
 
 
 describe("Captain Hook", function(){
   describe("preCreate()", function(){
 
-    it("runs before the instance is created", function(done){
-      var output = [];
-      var commentSchema = require("./setup/comment_schema");
 
-      commentSchema.preCreate(function(comment, next){
+    it("runs before an instance is created", function(done){
+      var output = [];
+
+      Comment.schema.preCreate(function(comment, next){
         output.push("I'm a preCreate hook!");
         next();
       })
 
-      commentSchema.pre('save', function(next){
-        // expect(output).to.include("I'm a preCreate hook!");
-        expect(output).to.include("testing")
+      Comment.schema.pre('save', function(next){
+        expect(output).to.include("I'm a preCreate hook!");
         next();
       })
 
-      Comment = mongoose.model('Comment', commentSchema);
       var comment = new Comment(commentData);
-      comment.save(function(){
+      comment.save(function(err, comment){
+        if (err) throw err;
         done();
       })
     })
 
 
 
-    it("doesn't run before the instance is updated", function(done){
+    it("doesn't run before an instance is updated", function(done){
       var output = [];
-      var commentSchema = require("./setup/comment_schema");
 
-      commentSchema.preCreate(function(comment, next){
+      Comment.schema.preCreate(function(comment, next){
         output.push("I'm a preCreate hook!");
         next();
       })
 
-      Comment = mongoose.model('Comment', commentSchema);
+      Comment.schema.pre('save', function(next){
+        expect(output).to.include("I'm a preCreate hook!");
+        next();
+      })
+
       var comment = new Comment(commentData);
       comment.save(function(err, comment){
-        expect(output.length).to.equal(2);
-        console.log("test");
+        if (err) throw err;
+        expect(output.length).to.equal(1)
         comment.content = "Oh, no. To live... to live would be an awfully big adventure."
-        comment.save(function(){
-          expect(output.length).to.equal(1);
+        comment.save(function(err){
+          // the hook should have only been executed on create, not on update
+          expect(output.length).to.equal(1)
           done();
         })
       })
