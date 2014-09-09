@@ -2,9 +2,9 @@
   "name": "captain-hook",
   "version": "0.0.2",
   "description": "Pre- and Post- Create and Update Hooks for Mongoose ODM",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "clear && mocha -R dot"
   },
   "repository": {
     "type": "git",
@@ -28,5 +28,10 @@
   "homepage": "https://github.com/nathanhackley/captain-hook",
   "dependencies": {
     "async": "~0.9.0"
+  },
+  "devDependencies": {
+    "chai": "~1.9.1",
+    "mongoose": "~3.8.16",
+    "underscore": "~1.7.0"
   }
 }
