@@ -1,9 +1,7 @@
 Captain Hook
 ============
 
-Pre- and Post- Create and Update Hooks for Mongoose ODM.
-
-![James Hook](https://raw.githubusercontent.com/nathanhackley/captain-hook/master/hook.jpeg)
+*Pre- and Post- Create and Update Hooks for Mongoose ODM.*
 
 #### Use-Case
 Out of the box, Mongoose provides you with the handy `pre('save')` and `post('save')` methods. Unfortunately, these hooks run every time the instance is saved, whether it is being created or updated. Captain Hook extends Mongoose to give you greater control over this functionality.
@@ -48,3 +46,13 @@ userSchema.postUpdate(function(user, next){
 Multiple pre- and post- methods can be added for each timing (preCreate, postCreate, preUpdate, postUpdate) and the functions will be run in the order they are defined.
 
 The `next()` callback must be called for every hook.
+
+-------------------
+
+### TO DO:
+- Tests for postCreate() and postUpdate() methods
+- Test that hooks fire in the correct order
+- More granular unit tests
+    - schema.preCreate()
+    - schema.methods.runPreCreate()
+    - schema.preCreateMethods array
