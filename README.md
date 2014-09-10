@@ -46,3 +46,13 @@ userSchema.postUpdate(function(user, next){
 Multiple pre- and post- methods can be added for each timing (preCreate, postCreate, preUpdate, postUpdate) and the functions will be run in the order they are defined.
 
 The `next()` callback must be called for every hook.
+
+-------------------
+
+### TO DO:
+- Tests for postCreate() and postUpdate() methods
+- Test that hooks fire in the correct order
+- More granular unit tests
+    - schema.preCreate()
+    - schema.methods.runPreCreate()
+    - schema.preCreateMethods array
