@@ -12,7 +12,7 @@ mongoose.connect("mongodb://localhost:27017/captain_hook_test", function(err, re
 });
 
 
-describe("Captain Hook", function(){
+describe("Pre-Hooks", function(){
   describe("preCreate()", function(){
 
     it("runs before an instance is created", function(done){
@@ -35,8 +35,6 @@ describe("Captain Hook", function(){
         done();
       })
     })
-
-
 
     it("doesn't run before an instance is updated", function(done){
       var output = [];

@@ -1,7 +1,7 @@
 Captain Hook
 ============
 
-Pre- and Post- Create and Update Hooks for Mongoose ODM.
+*Pre- and Post- Create and Update Hooks for Mongoose ODM.*
 
 #### Use-Case
 Out of the box, Mongoose provides you with the handy `pre('save')` and `post('save')` methods. Unfortunately, these hooks run every time the instance is saved, whether it is being created or updated. Captain Hook extends Mongoose to give you greater control over this functionality.
