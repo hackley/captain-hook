@@ -52,9 +52,8 @@ The `next()` callback must be called for every hook.
 -------------------
 
 ### TO DO:
-- Tests for postCreate() and postUpdate() methods
-- Test that hooks fire in the correct order
+- Tests for hooks firing in the correct order
 - More granular unit tests
     - schema.preCreate()
-    - schema.methods.runPreCreate()
+    - schema.methods.runPreCreate(), etc
     - schema.preCreateMethods array

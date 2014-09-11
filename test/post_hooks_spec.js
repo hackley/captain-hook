@@ -5,23 +5,23 @@ var expect        = require("chai").expect,
 
 utils.connectDB();
 
-describe("Pre-Hooks", function(){
-  describe("preCreate()", function(){
+describe("Post-Hooks", function(){
+  describe("postCreate()", function(){
 
     it("runs when an instance is created", function(done){
       var Comment = utils.resetModel();
       var output = [];
 
-      Comment.schema.preCreate(function(comment, next){
-        output.push("I'm a preCreate hook!");
+      Comment.schema.postCreate(function(comment, next){
+        output.push("I'm a postCreate hook!");
         next();
       })
 
       var comment = new Comment(commentData);
       comment.save(function(err, comment){
         if (err) throw err;
-        expect(output.length).to.equal(1);
-        expect(output).to.include("I'm a preCreate hook!");
+        expect(output.length).to.equal(1)
+        expect(output).to.include("I'm a postCreate hook!");
         done();
       })
     }) // runs when an instance is created
@@ -30,8 +30,8 @@ describe("Pre-Hooks", function(){
       var Comment = utils.resetModel();
       var output = [];
 
-      Comment.schema.preCreate(function(comment, next){
-        output.push("I'm a preCreate hook!");
+      Comment.schema.postCreate(function(comment, next){
+        output.push("I'm a postCreate hook!");
         next();
       })
 
@@ -39,6 +39,7 @@ describe("Pre-Hooks", function(){
       comment.save(function(err, comment){
         if (err) throw err;
         expect(output.length).to.equal(1)
+        expect(output).to.include("I'm a postCreate hook!");
         comment.content = "Oh, no. To live... to live would be an awfully big adventure."
         comment.save(function(err){
           // the hook should have only been executed on create, not on update
@@ -48,17 +49,16 @@ describe("Pre-Hooks", function(){
       })
     }) // doesn't run when an instance is updated
 
-  }) // preCreate()
+  }) // postCreate()
 
-
-  describe("preUpdate()", function(){
+  describe("postUpdate()", function(){
 
     it("runs when an instance is updated", function(done){
       var Comment = utils.resetModel();
       var output = [];
 
-      Comment.schema.preUpdate(function(comment, next){
-        output.push("I'm a preUpdate hook!");
+      Comment.schema.postUpdate(function(comment, next){
+        output.push("I'm a postUpdate hook!");
         next();
       })
 
@@ -67,9 +67,9 @@ describe("Pre-Hooks", function(){
         if (err) throw err;
         comment.content = "Oh, no. To live... to live would be an awfully big adventure."
         comment.save(function(err){
-          // the hook should execute here
+          // the hook should have only been executed on update, not on create
           expect(output.length).to.equal(1)
-          expect(output).to.include("I'm a preUpdate hook!")
+          expect(output).to.include("I'm a postUpdate hook!");
           done();
         })
       })
@@ -79,8 +79,8 @@ describe("Pre-Hooks", function(){
       var Comment = utils.resetModel();
       var output = [];
 
-      Comment.schema.preUpdate(function(comment, next){
-        output.push("I'm a preUpdate hook!");
+      Comment.schema.postUpdate(function(comment, next){
+        output.push("I'm a postUpdate hook!");
         next();
       })
 
@@ -92,5 +92,5 @@ describe("Pre-Hooks", function(){
       })
     }) // doesn't run when an instance is created
 
-  }) // preUpdate()
+  }) // postUpdate()
 })
