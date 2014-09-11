@@ -9,7 +9,13 @@ module.exports = function(grunt) {
       test: {
         options: {
           reporter: 'spec',
-          clearRequireCache: true
+          clearRequireCache: true,
+          require: [
+            'mongoose',
+            function(){ expect  = require("chai").expect },
+            function(){ factory = require("./utils/factories") },
+            function(){ utils   = require('./utils') },
+          ]
         },
         src: ['test/**/*.js']
       },
@@ -26,9 +32,13 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', [
+  grunt.registerTask('test', [
     'clear',
-    'mochaTest',
+    'mochaTest'
+  ]);
+
+  grunt.registerTask('default', [
+    'test',
     'watch'
   ]);
 

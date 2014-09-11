@@ -1,10 +1,3 @@
-var expect        = require("chai").expect,
-    mongoose      = require("mongoose"),
-    commentData   = require("./utils/comment_data"),
-    utils         = require('./utils');
-
-utils.connectDB();
-
 describe("Post-Hooks", function(){
   describe("postCreate()", function(){
 
@@ -17,7 +10,7 @@ describe("Post-Hooks", function(){
         next();
       })
 
-      var comment = new Comment(commentData);
+      var comment = new Comment(factory('comment'));
       comment.save(function(err, comment){
         if (err) throw err;
         expect(output.length).to.equal(1)
@@ -35,7 +28,7 @@ describe("Post-Hooks", function(){
         next();
       })
 
-      var comment = new Comment(commentData);
+      var comment = new Comment(factory('comment'));
       comment.save(function(err, comment){
         if (err) throw err;
         expect(output.length).to.equal(1)
@@ -62,7 +55,7 @@ describe("Post-Hooks", function(){
         next();
       })
 
-      var comment = new Comment(commentData);
+      var comment = new Comment(factory('comment'));
       comment.save(function(err, comment){
         if (err) throw err;
         comment.content = "Oh, no. To live... to live would be an awfully big adventure."
@@ -84,7 +77,7 @@ describe("Post-Hooks", function(){
         next();
       })
 
-      var comment = new Comment(commentData);
+      var comment = new Comment(factory('comment'));
       comment.save(function(err, comment){
         if (err) throw err;
         expect(output.length).to.equal(0)

@@ -23,3 +23,5 @@ module.exports = utils = {
   }
 
 }
+
+utils.connectDB();

@@ -1,5 +1,5 @@
 var mongoose    = require('mongoose'),
-    captainHook = require('../../lib');
+    captainHook = require('../lib');
 
 var commentSchema = mongoose.Schema({
   userName: {
