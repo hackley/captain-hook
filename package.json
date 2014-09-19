@@ -1,6 +1,6 @@
 {
   "name": "captain-hook",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Pre- and Post- Create and Update Hooks for Mongoose ODM",
   "main": "lib/index.js",
   "scripts": {
