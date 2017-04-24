@@ -37,7 +37,7 @@ userSchema.preUpdate(function(user, next){
   next();
 })
 
-// function to run before updating an existing user instance
+// function to run after updating an existing user instance
 userSchema.postUpdate(function(user, next){
   console.log("You just updated a user:" + user.email);
   next();
